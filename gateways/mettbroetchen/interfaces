@@ -1,0 +1,40 @@
+auto eth0
+iface eth0 inet static
+        address 5.9.6.217
+        netmask 255.255.255.224
+        network 5.9.6.192
+        broadcast 5.9.6.223
+        gateway 5.9.6.210
+        dns-nameservers ::1 127.0.0.1
+        dns-search freifunk-bingen.de
+iface eth0 inet6 static
+        address 2a01:4f8:160:7243::100
+        netmask 64
+        gateway fe80::1
+
+auto mzBR
+iface mzBR inet static
+    bridge_ports none
+    bridge_fd 0
+    bridge_maxwait 0
+    address 10.37.1.12
+    netmask 255.255.192.0
+
+iface mzBR inet6 static
+    address fd37:b4dc:4b1e::a25:10c
+    netmask 64
+
+allow-hotplug mzVPN
+iface mzVPN inet6 manual
+    hwaddress 02:00:0a:25:01:0c
+    pre-up          /sbin/modprobe batman-adv
+    post-up         /usr/sbin/batctl -m mzBAT if add $IFACE
+    post-up         /sbin/ip link set dev mzBAT up
+
+allow-hotplug mzBAT
+iface mzBAT inet6 manual
+    pre-up          /sbin/modprobe batman-adv
+    post-up         /sbin/brctl addif mzBR $IFACE
+    post-up         /usr/sbin/batctl -m $IFACE it 10000
+    post-up         /usr/sbin/batctl -m $IFACE gw off
+    pre-down        /sbin/brctl delif mzBR $IFACE || true
