@@ -1,0 +1,58 @@
+{
+  "name": "Freifunk Bingen",
+  "url": "https://www.freifunk-bingen.de",
+  "location": {
+    "city": "Bingen am Rhein",
+    "country": "DE",
+    "lat": 49.966944,
+    "lon": 7.895,
+    "address": {
+      "Name": "JuZ Bingen",
+      "Street": "Mainzer Str. 103a",
+      "Zipcode": "55411"
+    }
+  },
+  "contact": {
+    "email": "mail@freifunk-bingen.de",
+    "facebook": "https://www.facebook.com/FreifunkBingen",
+    "twitter": "@freifunkbingen"
+  },
+  "state": {
+    "focus": [
+      "infrastructure/backbone",
+      "Public Free Wifi",
+      "Social Community Building",
+      "Local services and content",
+      "Free internet access"
+    ],
+    "lastchange": "2015-08-13T20:58:18.553Z"
+  },
+  "timeline": [
+    {
+      "description": "Freifunk Bingen startet",
+      "timestamp": "2015-08-14",
+      "url": "https://www.freifunk-bingen.de"
+    }
+  ],
+  "feeds": [
+    {
+      "name": "Freifunk Bingen News",
+      "category": "blog",
+      "type": "rss",
+      "url": "https://www.freifunk-bingen.de/rss.xml"
+    }
+  ],
+  "techDetails": {
+    "firmware": {
+      "name": "gluon",
+      "url": "https://www.freifunk-bingen.de/mitmachen/anleitung/download",
+      "docs": "https://www.freifunk-bingen.de/mitmachen/anleitung"
+    },
+    "legals": [
+      "vpninternational"
+    ],
+    "routing": [],
+    "updatemode": []
+  },
+  "api": "0.4.8"
+}
