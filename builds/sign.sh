@@ -18,6 +18,16 @@ See also
 EOHELP
 	exit 1
 fi
+# check if using new merged binary (see https://github.com/tcatm/ecdsautils/issues/3)
+
+if command -v ecdsautil >/dev/null 2>&1; then
+	ECDSA_CMD="ecdsautil sign"
+elif command -v ecdsasign >/dev/null 2>&1; then
+	ECDSA_CMD="ecdsasign"
+else
+	echo >&2 "ecdsautils not found. exiting.";
+	exit 1;
+fi 
 
 SECRET="$1"
 
@@ -31,7 +41,7 @@ awk "BEGIN    { sep=0 }
                 else       print > \"$lower\"}" \
     "$manifest"
 
-ecdsasign "$upper" < "$SECRET" >> "$lower"
+$ECDSA_CMD "$upper" < "$SECRET" >> "$lower"
 
 cat  "$upper"  > "$manifest"
 echo ---      >> "$manifest"

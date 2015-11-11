@@ -1,17 +1,14 @@
 # Signieren
 
-1. Repo clonen / pullen:
-
+## 1. Repo clonen / pullen:
     git clone https://github.com/freifunk-bingen/docs-ffbin.git
     git pull
 
-2. Signieren:
-
+## 2. Signieren:
     cd builds/
     ./sign.sh <PFAD_ZU_ECDSA_SECRET> manifest
 
-3. Commiten / pushen
-
+## 3. commiten / pushen
     git add manifest
     git commit -a
     git push
