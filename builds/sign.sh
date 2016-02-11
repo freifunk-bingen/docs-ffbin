@@ -1,6 +1,8 @@
 #!/bin/sh
 
-if [ $# -eq 0 -o "-h" = "$1" -o "-help" = "$1" -o "--help" = "$1" ]; then
+set -e
+
+if [ $# -ne 2 -o "-h" = "$1" -o "--help" = "$1" -o ! -r "$1" -o ! -r "$2" ]; then
 	cat <<EOHELP
 Usage: $0 <secret> <manifest>
 
@@ -18,16 +20,6 @@ See also
 EOHELP
 	exit 1
 fi
-# check if using new merged binary (see https://github.com/tcatm/ecdsautils/issues/3)
-
-if command -v ecdsautil >/dev/null 2>&1; then
-	ECDSA_CMD="ecdsautil sign"
-elif command -v ecdsasign >/dev/null 2>&1; then
-	ECDSA_CMD="ecdsasign"
-else
-	echo >&2 "ecdsautils not found. exiting.";
-	exit 1;
-fi 
 
 SECRET="$1"
 
@@ -35,16 +27,18 @@ manifest="$2"
 upper="$(mktemp)"
 lower="$(mktemp)"
 
-awk "BEGIN    { sep=0 }
-     /^---\$/ { sep=1; next }
-              { if(sep==0) print > \"$upper\";
-                else       print > \"$lower\"}" \
+trap 'rm -f "$upper" "$lower"' EXIT
+
+awk 'BEGIN    { sep=0 }
+     /^---$/ { sep=1; next }
+              { if(sep==0) print > "'"$upper"'";
+                else       print > "'"$lower"'"}' \
     "$manifest"
 
-$ECDSA_CMD "$upper" < "$SECRET" >> "$lower"
+ecdsasign "$upper" < "$SECRET" >> "$lower"
 
-cat  "$upper"  > "$manifest"
-echo ---      >> "$manifest"
-cat  "$lower" >> "$manifest"
-
-rm -f "$upper" "$lower"
+(
+	cat  "$upper"
+	echo ---
+	cat  "$lower"
+) > "$manifest"
